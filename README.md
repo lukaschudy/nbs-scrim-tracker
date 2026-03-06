@@ -1,6 +1,6 @@
 # ScrimOS — Competitive Scrim Tracker
 
-A League of Legends scrim tracking platform built for amateur and semi-pro teams. Coaches log series results, track champion picks, and manage Fearless Draft eligibility across a full split.
+A League of Legends scrim tracking platform built for amateur, semi-pro and pro teams. Automatically log series results, track champion picks, and manage Fearless Draft eligibility across a full split.
 
 **Live demo:** [lukaschudy.github.io/nbs-scrim-tracker](https://lukaschudy.github.io/nbs-scrim-tracker)
 
