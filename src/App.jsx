@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Routes, Route, NavLink, Outlet, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, NavLink, Outlet, Navigate, Link } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { supabase } from './lib/supabase'
-import ProtectedRoute from './components/ProtectedRoute'
 
 import Dashboard       from './pages/Dashboard'
 import SeriesList      from './pages/SeriesList'
@@ -12,8 +11,31 @@ import NewSeries       from './pages/NewSeries'
 import Login           from './pages/Login'
 import Register        from './pages/Register'
 
-function AppLayout() {
+function TopBar() {
   const { session, signOut } = useAuth()
+
+  return (
+    <div className="top-bar">
+      <div className="top-bar-left">
+        <span className="top-bar-badge">Preview</span>
+        <span className="top-bar-text">You are viewing a demo — register your team to track real scrims</span>
+      </div>
+      <div className="top-bar-right">
+        {session ? (
+          <button onClick={signOut} className="btn btn-secondary btn-sm">Sign Out</button>
+        ) : (
+          <>
+            <Link to="/register" className="btn btn-secondary btn-sm">Register Team</Link>
+            <Link to="/login"    className="btn btn-primary    btn-sm">Login</Link>
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function AppLayout() {
+  const { session } = useAuth()
   const [teamName, setTeamName] = useState('')
 
   useEffect(() => {
@@ -36,44 +58,40 @@ function AppLayout() {
   ]
 
   return (
-    <div className="app">
-      <aside className="sidebar">
-        <div className="logo">
-          <span className="logo-name">ScrimOS</span>
-          <span className="logo-sub">{teamName || '—'}</span>
-        </div>
-        <nav>
-          {links.map(l => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              end={l.to === '/'}
-              className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
-            >
-              <span className="nav-icon">{l.icon}</span>
-              <span>{l.label}</span>
-            </NavLink>
-          ))}
-        </nav>
-        <div className="sidebar-footer">
-          <div className="api-status">
-            <span className="api-dot"></span>
-            <span>Riot API: Stub Mode</span>
+    <>
+      <TopBar />
+      <div className="app app-with-topbar">
+        <aside className="sidebar sidebar-with-topbar">
+          <div className="logo">
+            <span className="logo-name">ScrimOS</span>
+            <span className="logo-sub">{session ? (teamName || '…') : 'Demo'}</span>
           </div>
-          <div className="api-note" style={{ marginBottom: 10 }}>Production key pending</div>
-          <button
-            onClick={signOut}
-            className="btn btn-secondary"
-            style={{ width: '100%', fontSize: 12, padding: '7px 12px' }}
-          >
-            Sign Out
-          </button>
-        </div>
-      </aside>
-      <main className="main-content">
-        <Outlet />
-      </main>
-    </div>
+          <nav>
+            {links.map(l => (
+              <NavLink
+                key={l.to}
+                to={l.to}
+                end={l.to === '/'}
+                className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
+              >
+                <span className="nav-icon">{l.icon}</span>
+                <span>{l.label}</span>
+              </NavLink>
+            ))}
+          </nav>
+          <div className="sidebar-footer">
+            <div className="api-status">
+              <span className="api-dot"></span>
+              <span>Riot API: Stub Mode</span>
+            </div>
+            <div className="api-note">Production key pending</div>
+          </div>
+        </aside>
+        <main className="main-content">
+          <Outlet />
+        </main>
+      </div>
+    </>
   )
 }
 
@@ -82,18 +100,12 @@ export default function App() {
     <BrowserRouter basename="/nbs-scrim-tracker">
       <AuthProvider>
         <Routes>
-          {/* Public */}
+          {/* Auth pages — redirect to home if already logged in */}
           <Route path="/login"    element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Protected — all share AppLayout with sidebar */}
-          <Route
-            element={
-              <ProtectedRoute>
-                <AppLayout />
-              </ProtectedRoute>
-            }
-          >
+          {/* App — public (demo mode) but also works when logged in */}
+          <Route element={<AppLayout />}>
             <Route path="/"           element={<Dashboard />} />
             <Route path="/series"     element={<SeriesList />} />
             <Route path="/series/:id" element={<SeriesDetail />} />
