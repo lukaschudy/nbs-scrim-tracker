@@ -32,7 +32,11 @@ export function AuthProvider({ children }) {
   const signUp = (email, password) =>
     supabase.auth.signUp({ email, password })
 
-  const signOut = () => supabase.auth.signOut()
+  const signOut = async () => {
+    await supabase.auth.signOut()
+    // Clear any client-side query cache here when React Query is added:
+    // queryClient.clear()
+  }
 
   return (
     <AuthContext.Provider value={{ session, loading, signIn, signInWithDiscord, signUp, signOut }}>

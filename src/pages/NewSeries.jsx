@@ -16,7 +16,7 @@ const RIOT_API_FLOW = [
 ]
 
 export default function NewSeries() {
-  const [form, setForm] = useState({ opponent: '', format: 'BO5', date: new Date().toISOString().slice(0, 10), notes: '' })
+  const [form, setForm] = useState({ opponent: '', format: 'BO5', date: new Date().toISOString().slice(0, 10), patch_version: '25.5', season: '2026-Spring', notes: '' })
   const [submitted, setSubmitted] = useState(false)
   const [generatedCode, setGeneratedCode] = useState('')
   const [copied, setCopied] = useState(false)
@@ -40,7 +40,7 @@ export default function NewSeries() {
   }
 
   function handleReset() {
-    setForm({ opponent: '', format: 'BO5', date: new Date().toISOString().slice(0, 10), notes: '' })
+    setForm({ opponent: '', format: 'BO5', date: new Date().toISOString().slice(0, 10), patch_version: '25.5', season: '2026-Spring', notes: '' })
     setSubmitted(false)
     setGeneratedCode('')
     setCopied(false)
@@ -89,6 +89,27 @@ export default function NewSeries() {
                     onChange={handleChange}
                   />
                 </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <div className="form-group">
+                    <label className="form-label">Patch</label>
+                    <input
+                      className="form-input"
+                      name="patch_version"
+                      value={form.patch_version}
+                      onChange={handleChange}
+                      placeholder="e.g. 25.5"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Season</label>
+                    <select className="form-select" name="season" value={form.season} onChange={handleChange}>
+                      <option value="2026-Spring">2026 Spring</option>
+                      <option value="2026-Summer">2026 Summer</option>
+                      <option value="2025-Spring">2025 Spring</option>
+                      <option value="2025-Summer">2025 Summer</option>
+                    </select>
+                  </div>
+                </div>
                 <div className="form-group">
                   <label className="form-label">Notes (optional)</label>
                   <input
@@ -107,7 +128,7 @@ export default function NewSeries() {
           ) : (
             <div className="card">
               <div className="alert alert-success mb-6">
-                Series created vs <strong>{form.opponent}</strong> · {form.format} · {form.date}
+                Series created vs <strong>{form.opponent}</strong> · {form.format} · {form.date} · Patch {form.patch_version}
               </div>
 
               <div className="section-title">Game 1 Tournament Code</div>

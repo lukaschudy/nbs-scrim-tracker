@@ -75,6 +75,8 @@ export const series = [
     result: 'win',
     score: '3-1',
     format: 'BO5',
+    patch_version: '25.4',
+    season: '2026-Spring',
     notes: 'Strong early game, dominated mid through jng synergy.',
     tournamentCode: 'EUWC1-ABCD-1234-EF56-GHIJ7890KL',
     games: [
@@ -178,6 +180,8 @@ export const series = [
     result: 'loss',
     score: '1-2',
     format: 'BO3',
+    patch_version: '25.4',
+    season: '2026-Spring',
     notes: 'Lost botlane matchup in games 2 and 3. Need to address early Draven / Lucian read.',
     tournamentCode: 'EUWC1-EFGH-5678-IJ90-KLMN1234OP',
     games: [
@@ -259,6 +263,8 @@ export const series = [
     result: null,
     score: '2-2',
     format: 'BO5',
+    patch_version: '25.5',
+    season: '2026-Spring',
     notes: 'Tied at 2-2. Game 5 is do-or-die. Watch their Jarvan IV / Galio combo.',
     tournamentCode: 'EUWC1-MNOP-9012-QR34-STUV5678WX',
     games: [
